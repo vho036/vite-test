@@ -17,6 +17,22 @@
   }
 }
 
+.dark-button {
+  background-color: #162432;
+  color: #a2cbf2;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: border-color 0.3s;
+
+  &:hover {
+    border-color: #007bff;
+  }
+}
+
+
 .hero {
   position: relative;
 
