@@ -1,12 +1,14 @@
 import { useState } from 'react'
+import useSound from 'use-sound';
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
+import bell from './assets/sounds/bell.mp3';
 import './App.css'
 
 function MenuButton(props: any) {
-  const [value, setValue] = useState(props.children)
-  const [option, setOption] = useState(true)
+  const [value, setValue] = useState(props.children);
+  const [option, setOption] = useState(true);
 
   function SwitchValue (): void {
     if (option) {
@@ -25,6 +27,21 @@ function MenuButton(props: any) {
   )
 }
 
+function SoundButton() {
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [play, {stop}] = useSound(bell, {volume: 0.5}); 
+
+  return (
+    <button 
+      type='button' 
+      className='counter'
+      onMouseLeave={() => {stop(); setIsPlaying(false)}}
+      onClick={() => {play(); setIsPlaying(true)}} 
+    >
+      {isPlaying.toString()}
+    </button>
+  )
+}
 
 function App() {
   const [count, setCount] = useState(0)
@@ -39,6 +56,7 @@ function App() {
         </div>
       </section>
       <section id="center">
+        <SoundButton></SoundButton>
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
           <img src={reactLogo} className="framework" alt="React logo" />
