@@ -21,7 +21,7 @@ function MenuButton(props: any) {
   }
 
   return (
-    <button type='button' className='menu-button' onClick={() => {SwitchValue()}} >
+    <button type='button' className='menu-button' onClick={SwitchValue} >
       {value}
     </button>
   )
@@ -29,7 +29,7 @@ function MenuButton(props: any) {
 
 function SoundButton() {
   const [isPlaying, setIsPlaying] = useState(false)
-  const [play, {stop}] = useSound(bell, {volume: 0.5}); 
+  const [play, {stop}] = useSound(bell, {volume: 0.5})
 
   return (
     <button 
@@ -43,134 +43,75 @@ function SoundButton() {
   )
 }
 
-function App() {
+function Home() {
   const [count, setCount] = useState(0)
+
+  return (
+    <>
+      <div></div>
+      <SoundButton></SoundButton>
+      <button
+        type="button"
+        className="dark-button"
+        onClick={() => setCount((count) => count + 3)}
+      >
+        Increase counter
+      </button>
+      <button
+        type="button"
+        className="dark-button"
+        onClick={() => setCount((count) => count - 1)}
+      >
+        Decrease counter
+      </button>
+      <div>
+        {count}
+      </div> 
+    </>
+  )
+}
+
+function PitchLearner() {
+  return (
+    <></>
+  )
+}
+
+function MainView({currentPage}: any) {
+
+  if (currentPage == 'home') {
+    return (
+      Home()
+    )
+  }
+  else if (currentPage == 'pitch-learner') {
+    return (
+      PitchLearner()
+    )
+  }
+}
+
+function App() {
+  const [currentPage, setCurrentPage] = useState('home')
 
   return (
     <>
       <section id='left'>
         <div className='menu-bar'>
-            <MenuButton>Home</MenuButton>
-            <MenuButton>Pitch learner</MenuButton>
-            <MenuButton>About</MenuButton>
+            <button className='menu-button' onClick={() => {setCurrentPage('home')}}>
+              Home
+            </button>
+            <button className='menu-button' onClick={() => {setCurrentPage('pitch-learner')}}>
+              Pitch learner
+            </button>
+            <MenuButton>
+              Custombutton
+            </MenuButton>
         </div>
       </section>
       <section id="center">
-        <SoundButton></SoundButton>
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="dark-button"
-          onClick={() => setCount((count) => count + 3)}
-        >
-          Increase counter
-        </button>
-        <button
-          type="button"
-          className="dark-button"
-          onClick={() => setCount((count) => count - 1)}
-        >
-          Decrease counter
-        </button>
+        <MainView currentPage={currentPage}></MainView>
       </section>
-
-      <div className="ticks">
-        {count}
-      </div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
     </>
   )
 }
