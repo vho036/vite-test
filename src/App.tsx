@@ -1,10 +1,7 @@
 import { useState } from 'react'
-import useSound from 'use-sound';
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import bell from './assets/sounds/bell.mp3';
 import './App.css'
+import PitchLearner from './modules/PitchLearner.tsx'
+import Home from './modules/Home.tsx'
 
 function MenuButton(props: any) {
   const [value, setValue] = useState(props.children);
@@ -21,72 +18,21 @@ function MenuButton(props: any) {
   }
 
   return (
-    <button type='button' className='menu-button' onClick={SwitchValue} >
+    <button className='menu-button' onClick={SwitchValue} >
       {value}
     </button>
   )
 }
 
-function SoundButton() {
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [play, {stop}] = useSound(bell, {volume: 0.5})
-
-  return (
-    <button 
-      type='button' 
-      className='counter'
-      onMouseLeave={() => {stop(); setIsPlaying(false)}}
-      onClick={() => {play(); setIsPlaying(true)}} 
-    >
-      {isPlaying.toString()}
-    </button>
-  )
-}
-
-function Home() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div></div>
-      <SoundButton></SoundButton>
-      <button
-        type="button"
-        className="dark-button"
-        onClick={() => setCount((count) => count + 3)}
-      >
-        Increase counter
-      </button>
-      <button
-        type="button"
-        className="dark-button"
-        onClick={() => setCount((count) => count - 1)}
-      >
-        Decrease counter
-      </button>
-      <div>
-        {count}
-      </div> 
-    </>
-  )
-}
-
-function PitchLearner() {
-  return (
-    <></>
-  )
-}
-
 function MainView({currentPage}: any) {
-
   if (currentPage == 'home') {
     return (
-      Home()
+      <Home />
     )
   }
   else if (currentPage == 'pitch-learner') {
     return (
-      PitchLearner()
+      <PitchLearner />
     )
   }
 }
@@ -109,7 +55,7 @@ function App() {
             </MenuButton>
         </div>
       </section>
-      <section id="center">
+      <section>
         <MainView currentPage={currentPage}></MainView>
       </section>
     </>
