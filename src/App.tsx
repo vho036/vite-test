@@ -4,11 +4,40 @@ import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
 
+function MenuButton(props: any) {
+  const [value, setValue] = useState(props.children)
+  const [option, setOption] = useState(true)
+
+  function SwitchValue (): void {
+    if (option) {
+      setValue('neh')
+    } 
+    else if (!option) {
+      setValue('yeh')
+    }
+    setOption(!option)
+  }
+
+  return (
+    <button type='button' className='menu-button' onClick={() => {SwitchValue()}} >
+      {value}
+    </button>
+  )
+}
+
+
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
+      <section id='left'>
+        <div className='menu-bar'>
+            <MenuButton>Home</MenuButton>
+            <MenuButton>Pitch learner</MenuButton>
+            <MenuButton>About</MenuButton>
+        </div>
+      </section>
       <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
