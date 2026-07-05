@@ -65,7 +65,7 @@ function App() {
           </button>
           <div className='dropdown-content'>
             <button className='menu-button dropdown' onClick={() => {setCurrentPage('pitch-learner')}}>
-              Pitch learner
+              Pitch learnerr
             </button>
           </div>
         </div>
