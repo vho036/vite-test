@@ -24,19 +24,6 @@ function MenuButton(props: any) {
   )
 }
 
-function MainView({currentPage}: any) {
-  if (currentPage == 'home') {
-    return (
-      <Home />
-    )
-  }
-  else if (currentPage == 'pitch-learner') {
-    return (
-      <PitchLearner />
-    )
-  }
-}
-
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
 
@@ -56,7 +43,8 @@ function App() {
         </div>
       </section>
       <section>
-        <MainView currentPage={currentPage}></MainView>
+        {(currentPage === 'home') && <Home />}
+        {(currentPage === 'pitch-learner') && <PitchLearner />}
       </section>
     </>
   )
