@@ -60,11 +60,11 @@ function App() {
           Home
         </button>
         <div className='dropdown'>
-          <button className='menu-button' onClick={() => {setCurrentPage('pitch-learner')}}>
+          <button className='menu-button'>
             Tools
           </button>
           <div className='dropdown-content'>
-            <button className='menu-button' onClick={() => {setCurrentPage('pitch-learner')}}>
+            <button className='menu-button dropdown' onClick={() => {setCurrentPage('pitch-learner')}}>
               Pitch learner
             </button>
           </div>
