@@ -47,7 +47,7 @@ function QuestionPage({children}: any) {
       return (
         <button 
           key={option.name}
-          className='dark-button' 
+          className='round-button' 
           onClick={() => {setResponse(option.name); 
                           setStatus('post-question')}}
         >

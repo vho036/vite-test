@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <div>
       <div>
-        <h2 className='fade-in-header'>
+        <h2>
           Welcome to the pitch learner tool.
         </h2>
       </div>

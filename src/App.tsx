@@ -24,24 +24,52 @@ function MenuButton(props: any) {
   )
 }
 
+function DropdownButton({children, ...props}: any) {
+  const [isOpen, setIsOpen] = useState(false)
+  return (
+    <>
+    <button 
+      onClick={props.onClick}
+      className='menu-button'
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+    >
+      Home
+      {(isOpen) && 
+        <ul>
+          {children.map((child: any) => {
+            return (
+              <li key={child}>
+                {child}
+              </li>
+            )})}
+        </ul>
+      }
+    </button>
+    </>
+  )
+}
+
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
 
   return (
     <>
-      <section id='left'>
-        <div className='menu-bar'>
-            <button className='menu-button' onClick={() => {setCurrentPage('home')}}>
-              Home
-            </button>
+      <nav id='left'>
+        <button className='menu-button' onClick={() => {setCurrentPage('home')}}>
+          Home
+        </button>
+        <div className='dropdown'>
+          <button className='menu-button' onClick={() => {setCurrentPage('pitch-learner')}}>
+            Tools
+          </button>
+          <div className='dropdown-content'>
             <button className='menu-button' onClick={() => {setCurrentPage('pitch-learner')}}>
               Pitch learner
             </button>
-            <MenuButton>
-              Custombutton
-            </MenuButton>
+          </div>
         </div>
-      </section>
+      </nav>
       <section>
         {(currentPage === 'home') && <Home />}
         {(currentPage === 'pitch-learner') && <PitchLearner />}
