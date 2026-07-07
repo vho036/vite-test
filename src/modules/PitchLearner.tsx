@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useReducer, useState, useEffect } from 'react'
 import '../App.css'
 import useSound from 'use-sound'
 import bell from '../assets/sounds/bell.opus'
@@ -9,24 +9,35 @@ import c4 from '../assets/sounds/c4.opus'
 
 
 function SoundButton({source, children}: any) {
+
   const [isPlaying, setIsPlaying] = useState(false)
-  const [play, {stop}] = useSound(source, {volume: 0.5})
-  const [className, setClassName] = useState('dark-button')
+  const [play, {stop}] = useSound(source, {
+    volume: 0.5, 
+    onend: () => setIsPlaying(false),
+  })
 
   return (
+    <>
+    {<>
+      {play()} 
+      {setIsPlaying(true)}
+    </>}
     <button  
-      className={className}
+      className='dark-button'
       onMouseLeave={() => {stop(); setIsPlaying(false)}}
       onClick={() => {if (!isPlaying) {play()}; setIsPlaying(true)}} 
     >
       {children} {isPlaying.toString()}
     </button>
+    </>
   )
 }
 
-function QuestionPage({children}: any) {
-  const [status, setStatus] = useState('active-question')
 
+function QuestionPage({children}: any) {
+  const [activeQuestion, setActiveQuestion] = useState(true)
+
+  // hardcoded for now, TODO: change
   const options = [
     {name: 'g3', source: g3},
     {name: 'a3', source: a3},
@@ -37,7 +48,6 @@ function QuestionPage({children}: any) {
   const generateAnswer = () => {
     return options[Math.floor(Math.random() * options.length)]
   }
-
   const [correctAnswer, setCorrectAnswer] = useState(generateAnswer())
   const [response, setResponse] = useState('')
 
@@ -47,52 +57,74 @@ function QuestionPage({children}: any) {
       return (
         <button 
           key={option.name}
-          className='round-button' 
+          className='round-button'
           onClick={() => {setResponse(option.name); 
-                          setStatus('post-question')}}
+                          setActiveQuestion(false)}}
+          disabled={!activeQuestion}
         >
         {option.name}
         </button>
         )
     })
   }
+
+  
+
+  // sound stuff
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [play, {stop}] = useSound(
+    correctAnswer.source,
+    { volume: 0.5, onend: () => setIsPlaying(false) }
+  )
+
+  useEffect(() => {
+    if (play) {
+      play()
+      setIsPlaying(true)
+    }
+  }, [correctAnswer, play])
+
+  const handleNewQuestion = () => {
+    if (typeof stop === 'function') stop()
+    let newAnswer = generateAnswer()
+    setCorrectAnswer(newAnswer)
+    setActiveQuestion(true)
+  }
   
   return (
     <>
     {children}
-    {(status === 'active-question') &&
-      <>
-      <div>
-        <SoundButton source={correctAnswer.source}> 
-          {correctAnswer.name} 
-        </SoundButton>
+    <div className='parent flex-parent'>
+      {/* Three columns: sound button, answer buttons, feedback. */}
+      <div className='child flex-child'>
+        <button
+          className='dark-button'
+          onMouseLeave={() => {stop(); setIsPlaying(false)}}
+          onClick={() => {
+            if (!isPlaying) { play(); setIsPlaying(true) }
+            else { stop(); setIsPlaying(false) }
+          }}
+        >
+          {correctAnswer.name} {isPlaying.toString()}
+        </button>
       </div>
-      <div>
+      <div className='flex-child'>
         {generateOptionsButtons()}
       </div>
-      </>
-    }
-    {(status === 'post-question') &&
-      <>
-      <div>
-        <div className='dialog-background'>
-        <div className='dialog'>
-          <div>{children}</div>
+      <div className='flex-child'>
+        {(!activeQuestion) &&
+          <>
           <div>{(correctAnswer.name === response) ? <>Correct!</>  : <>Wrong.</>}</div>
           <button
             className='dark-button'
-            onClick={() => {
-              setStatus('active-question');
-              setCorrectAnswer(generateAnswer)  
-            }}
+            onClick={handleNewQuestion}
           >
           Next question
           </button>
-        </div>
-        </div>
+          </>
+        }
       </div>
-      </>
-    }
+    </div>
     </>
   )
 }

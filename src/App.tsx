@@ -3,53 +3,6 @@ import './App.css'
 import PitchLearner from './modules/PitchLearner.tsx'
 import Home from './modules/Home.tsx'
 
-function MenuButton(props: any) {
-  const [value, setValue] = useState(props.children);
-  const [option, setOption] = useState(true);
-
-  function SwitchValue (): void {
-    if (option) {
-      setValue('neh')
-    } 
-    else if (!option) {
-      setValue('yeh')
-    }
-    setOption(!option)
-  }
-
-  return (
-    <button className='menu-button' onClick={SwitchValue} >
-      {value}
-    </button>
-  )
-}
-
-function DropdownButton({children, ...props}: any) {
-  const [isOpen, setIsOpen] = useState(false)
-  return (
-    <>
-    <button 
-      onClick={props.onClick}
-      className='menu-button'
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => setIsOpen(false)}
-    >
-      Home
-      {(isOpen) && 
-        <ul>
-          {children.map((child: any) => {
-            return (
-              <li key={child}>
-                {child}
-              </li>
-            )})}
-        </ul>
-      }
-    </button>
-    </>
-  )
-}
-
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
 
@@ -65,7 +18,7 @@ function App() {
           </button>
           <div className='dropdown-content'>
             <button className='menu-button dropdown' onClick={() => {setCurrentPage('pitch-learner')}}>
-              Pitch learnerr
+              Pitch learner
             </button>
           </div>
         </div>

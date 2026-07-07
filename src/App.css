@@ -33,6 +33,16 @@
   }
 }
 
+button:disabled,
+button[disabled]{
+  transition: none;
+  cursor: auto;
+  filter: brightness(0.5);
+  &:hover {
+    border-color: transparent;
+  }
+}
+
 .menu-button {
   background-color: transparent;
   color: #a2cbf2;
@@ -125,4 +135,17 @@
   opacity: 0;
   animation: fadeIn 1s ease forwards;
   animation-delay: 0.2s;
+}
+
+.flex {
+  display: flex;
+  flex: 1;
+}
+
+.flex-parent {
+  display: flex;
+}
+
+.flex-child {
+  flex: 1;
 }
