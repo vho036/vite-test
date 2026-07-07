@@ -74,38 +74,26 @@ function QuestionPage({children}: any) {
     { volume: 0.5, onend: () => setIsPlaying(false) }
   )
 
-  const previousAnswer = useRef<(() => void) | null>(null)
-
   useEffect(() => {
     // stop any previously-playing sound instance, then play the new one once
-    if (previousAnswer.current) {
-      previousAnswer.current()
-      previousAnswer.current = null
-    }
-    if (play) {
-      play()
-      setIsPlaying(true)
-      previousAnswer.current = stop
+    // this triggers on definition and updates of correctAnswer and play
+    stop()
+    play()
+    setIsPlaying(true)
+
+    // stops playback on component de-render
+    return () => {
+      stop()
     }
   }, [correctAnswer, play])
 
   const handleNewQuestion = () => {
     let newAnswer = generateAnswer()
     // If the RNG picks the same answer, force a replay of the same sound
+    // this is otherwise handled by useEffect due to const updates
     if (newAnswer.name === correctAnswer.name) {
-      if (typeof stop === 'function') stop()
-      if (typeof play === 'function') {
-        play()
-        setIsPlaying(true)
-        previousAnswer.current = stop
-      }
-      setActiveQuestion(true)
-      return
-    }
-
-    if (previousAnswer.current) {
-      previousAnswer.current()
-      previousAnswer.current = null
+      stop()
+      play()
     }
     setCorrectAnswer(newAnswer)
     setActiveQuestion(true)
@@ -143,6 +131,7 @@ function QuestionPage({children}: any) {
           </>
         }
       </div>
+      <div className='flex-child' />
     </div>
     </>
   )
