@@ -1,7 +1,6 @@
-import { useReducer, useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import '../App.css'
 import useSound from 'use-sound'
-import bell from '../assets/sounds/bell.opus'
 import g3 from '../assets/sounds/g3.opus'
 import a3 from '../assets/sounds/a3.opus'
 import b3 from '../assets/sounds/b3.opus'
@@ -68,8 +67,6 @@ function QuestionPage({children}: any) {
     })
   }
 
-  
-
   // sound stuff
   const [isPlaying, setIsPlaying] = useState(false)
   const [play, {stop}] = useSound(
@@ -77,16 +74,39 @@ function QuestionPage({children}: any) {
     { volume: 0.5, onend: () => setIsPlaying(false) }
   )
 
+  const previousAnswer = useRef<(() => void) | null>(null)
+
   useEffect(() => {
+    // stop any previously-playing sound instance, then play the new one once
+    if (previousAnswer.current) {
+      previousAnswer.current()
+      previousAnswer.current = null
+    }
     if (play) {
       play()
       setIsPlaying(true)
+      previousAnswer.current = stop
     }
   }, [correctAnswer, play])
 
   const handleNewQuestion = () => {
-    if (typeof stop === 'function') stop()
     let newAnswer = generateAnswer()
+    // If the RNG picks the same answer, force a replay of the same sound
+    if (newAnswer.name === correctAnswer.name) {
+      if (typeof stop === 'function') stop()
+      if (typeof play === 'function') {
+        play()
+        setIsPlaying(true)
+        previousAnswer.current = stop
+      }
+      setActiveQuestion(true)
+      return
+    }
+
+    if (previousAnswer.current) {
+      previousAnswer.current()
+      previousAnswer.current = null
+    }
     setCorrectAnswer(newAnswer)
     setActiveQuestion(true)
   }
@@ -98,14 +118,16 @@ function QuestionPage({children}: any) {
       {/* Three columns: sound button, answer buttons, feedback. */}
       <div className='child flex-child'>
         <button
-          className='dark-button'
-          onMouseLeave={() => {stop(); setIsPlaying(false)}}
+          className='sound-button'
+          // onMouseLeave={() => {stop(); setIsPlaying(false)}}
           onClick={() => {
             if (!isPlaying) { play(); setIsPlaying(true) }
             else { stop(); setIsPlaying(false) }
           }}
         >
-          {correctAnswer.name} {isPlaying.toString()}
+        {/* PLAY = '\u25B6'
+            STOP = '\u23F9' */}
+        {isPlaying ? '■' : '▶'}
         </button>
       </div>
       <div className='flex-child'>
