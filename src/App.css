@@ -1,4 +1,4 @@
-.dark-button {
+button {
   margin-top: 24px;
   margin-bottom: 24px;
   margin-left: 10px;
@@ -15,23 +15,11 @@
     border-color: #007bff;
   }
 }
-.sound-button {
-  margin-top: 24px;
-  margin-bottom: 24px;
-  margin-left: 10px;
-  background-color: #162432;
-  color: #a2cbf2;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  padding: 5px 10px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: border-color 0.3s;
+
+.active-sound {
   animation:pulse-border 0.7s infinite;
-  &:hover {
-    border-color: #007bff;
-  }
 }
+
 @keyframes pulse-border{
   0%   { box-shadow: 0 0 0 0 rgba(76,175,80,0.7); }
   70%  { box-shadow: 0 0 0 10px rgba(76,175,80,0); }
@@ -39,20 +27,8 @@
 }
 
 .round-button {
-  margin-top: 24px;
-  margin-bottom: 24px;
-  margin-left: 10px;
-  background-color: #162432;
-  color: #a2cbf2;
-  border: 2px solid transparent;
   padding: 10px 10px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: border-color 0.3s;
   border-radius: 100%;
-  &:hover {
-    border-color: #007bff;
-  }
 }
 
 button:disabled,
@@ -66,20 +42,15 @@ button[disabled]{
 }
 
 .menu-button {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 0;
   background-color: transparent;
   color: #a2cbf2;
   font-size: 25px;
   font-weight: bolder;
-  border: 2px solid transparent;
-  border-radius: 8px;
   padding: 20px 40px;
   width: 250px;
-  cursor: pointer;
-  transition: border-color 0.3s;
-
-  &:hover {
-    border-color: #007bff;
-  }
 }
 
 .dropdown {

@@ -15,15 +15,15 @@ function SoundButton({source, children}: any) {
     onend: () => setIsPlaying(false),
   })
 
+  useEffect(() => {
+    play()
+    setIsPlaying(true)
+  }, [play])
+
   return (
     <>
-    {<>
-      {play()} 
-      {setIsPlaying(true)}
-    </>}
     <button  
       className='dark-button'
-      onMouseLeave={() => {stop(); setIsPlaying(false)}}
       onClick={() => {if (!isPlaying) {play()}; setIsPlaying(true)}} 
     >
       {children} {isPlaying.toString()}
@@ -118,15 +118,12 @@ function QuestionPage({children}: any) {
       {/* Three columns: sound button, answer buttons, feedback. */}
       <div className='child flex-child'>
         <button
-          className='sound-button'
-          // onMouseLeave={() => {stop(); setIsPlaying(false)}}
+          className={isPlaying ? 'active-sound' : ''}
           onClick={() => {
             if (!isPlaying) { play(); setIsPlaying(true) }
             else { stop(); setIsPlaying(false) }
           }}
         >
-        {/* PLAY = '\u25B6'
-            STOP = '\u23F9' */}
         {isPlaying ? '■' : '▶'}
         </button>
       </div>
