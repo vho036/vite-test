@@ -7,39 +7,8 @@ import b3 from '../assets/sounds/b3.opus'
 import c4 from '../assets/sounds/c4.opus'
 
 
-function SoundButton({resource, setIsSoundPlaying, children}: any) {
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [play, {stop}] = useSound(
-    resource.url,
-    { volume: 0.5, onend: () => setIsPlaying(false) })
-
-  useEffect(() => {
-    // stop any previously-playing sound instance, then play the new one once
-    // this triggers on definition and updates of play
-    stop()
-    play()
-    setIsPlaying(true)
-    // stops playback on component de-render
-    return () => {
-      stop()
-    }
-  }, [play])
-  
-  return (
-    <button
-      onClick={() => {
-        if (!isPlaying) {play(); setIsPlaying(true)}
-        else {stop(); setIsPlaying(false)}}}
-      >
-        {isPlaying ? '■' : '▶'}
-      {children}
-    </button>
-  )
-}
-
-
 function QuestionPage({children}: any) {
-  const [activeQuestion, setActiveQuestion] = useState(true)
+  const [isActiveQuestion, setIsActiveQuestion] = useState(true)
 
   // hardcoded for now, TODO: change
   const options = [
@@ -63,8 +32,8 @@ function QuestionPage({children}: any) {
           key={option.name}
           className='round-button'
           onClick={() => {setResponse(option.name); 
-                          setActiveQuestion(false)}}
-          disabled={!activeQuestion}
+                          setIsActiveQuestion(false)}}
+          disabled={!isActiveQuestion}
         >
         {option.name}
         </button>
@@ -99,7 +68,7 @@ function QuestionPage({children}: any) {
     if (newAnswer.name === correctAnswer.name) { play() }
     setCorrectAnswer(newAnswer)
     setActiveSound(newAnswer)
-    setActiveQuestion(true)
+    setIsActiveQuestion(true)
     console.log(newAnswer)
   }
 
@@ -123,7 +92,7 @@ function QuestionPage({children}: any) {
         {generateOptionsButtons()}
       </div>
       <div className='flex-child'>
-        {(!activeQuestion) &&
+        {(!isActiveQuestion) &&
           <>
           <div>{(correctAnswer.name === response) ? <>Correct!</>  : <>Wrong.</>}</div>
           <button onClick={handleNewQuestion}>
@@ -132,7 +101,6 @@ function QuestionPage({children}: any) {
           </>
         }
       </div>
-      <div className='flex-child' />
     </div>
     </>
   )

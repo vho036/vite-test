@@ -8,25 +8,15 @@ export default function Home() {
   return (
     <div>
       <div>
-        <h2>
-          Welcome to the pitch learner tool.
-        </h2>
+        <h2>Welcome to the pitch learner tool.</h2>
       </div>
-      <button
-        className="dark-button"
-        onClick={() => setCount((count) => count + 3)}
-      >
+      <button onClick={() => setCount((count) => count + 3)}>
         Increase counter
       </button>
-      <button
-        className="dark-button"
-        onClick={() => setCount((count) => count - 1)}
-      >
+      <button onClick={() => setCount((count) => count - 1)}>
         Decrease counter
       </button>
-      <h3>
-        Counter: {count}
-      </h3> 
+      <h3>Counter: {count}</h3> 
     </div>
   )
 }
