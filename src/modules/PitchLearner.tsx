@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import '../App.css'
 import useSound from 'use-sound'
 import g3 from '../assets/sounds/g3.opus'
@@ -10,7 +10,7 @@ import c4 from '../assets/sounds/c4.opus'
 function SoundButton({resource, setIsSoundPlaying, children}: any) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [play, {stop}] = useSound(
-    resource.source,
+    resource.url,
     { volume: 0.5, onend: () => setIsPlaying(false) })
 
   useEffect(() => {
@@ -43,10 +43,10 @@ function QuestionPage({children}: any) {
 
   // hardcoded for now, TODO: change
   const options = [
-    {name: 'g3', source: g3},
-    {name: 'a3', source: a3},
-    {name: 'b3', source: b3},
-    {name: 'c4', source: c4}
+    {name: 'g3', url: g3},
+    {name: 'a3', url: a3},
+    {name: 'b3', url: b3},
+    {name: 'c4', url: c4}
   ]
 
   const generateAnswer = () => {
@@ -76,7 +76,7 @@ function QuestionPage({children}: any) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [activeSound, setActiveSound] = useState(correctAnswer)
   const [play, {stop}] = useSound(
-    activeSound.source,
+    activeSound.url,
     { volume: 0.5, onend: () => setIsPlaying(false) }
   )
   const togglePlayback = () => {
@@ -85,32 +85,24 @@ function QuestionPage({children}: any) {
   }
 
   useEffect(() => {
-    // stop any previously-playing sound instance, then play the new one once
-    // this triggers on initial definition and any update of play
-    stop()
-    play()
-    setIsPlaying(true)
-
-    // stops playback on component de-render
-    return () => {
-      stop()
-    }
+    // Stop any previously-playing sound instance, then play the new one once.
+    // This triggers on initial definition and any update of play.
+    stop(); play(); setIsPlaying(true);
+    // Stops playback on component de-render.
+    return () => { stop() }
   }, [play])
 
   const handleNewQuestion = () => {
-    stop()
     let newAnswer = generateAnswer()
-    // If the RNG picks the same answer, force a replay of the same sound
-    // this is otherwise handled by useEffect due to const updates
-    if (newAnswer.name === correctAnswer.name) {
-      stop()
-      play()
-    }
+    // If the RNG picks the same answer, force a replay of the same sound.
+    // Automatic playback is otherwise accomplished by useEffect because play changes.
+    if (newAnswer.name === correctAnswer.name) { play() }
     setCorrectAnswer(newAnswer)
     setActiveSound(newAnswer)
     setActiveQuestion(true)
+    console.log(newAnswer)
   }
-  
+
   return (
     <>
     {children}
@@ -134,11 +126,8 @@ function QuestionPage({children}: any) {
         {(!activeQuestion) &&
           <>
           <div>{(correctAnswer.name === response) ? <>Correct!</>  : <>Wrong.</>}</div>
-          <button
-            className='dark-button'
-            onClick={handleNewQuestion}
-          >
-          Next question
+          <button onClick={handleNewQuestion}>
+            Next question
           </button>
           </>
         }
